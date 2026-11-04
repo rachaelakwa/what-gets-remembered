@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="description" content="What Gets Remembered: a field archive built from one October 2026 visit to the Internet Archive." />
+<title>What Gets Remembered // Field Archive</title>
+<style>
+@import url("https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Special+Elite&display=swap");
+:root{
+  --archive-serif:"IM Fell English", Georgia, "Times New Roman", serif;
+  --archive-type:"Special Elite", "Courier New", monospace;
+  --ink:#24231d;
+  --muted:#666253;
+  --paper:#f4efd8;
+  --paper2:#fffaf0;
+  --olive:#626843;
+  --olive2:#7b8055;
+  --red:#8a3028;
+  --line:#b9af91;
+  --dark:#2d3028;
+  --blue:#243c86;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#d8d0bb;color:var(--ink);font-family:var(--archive-type);line-height:1.62}
+button,input,textarea{font:inherit}button{cursor:pointer}a{color:var(--blue)}
+.shell{width:min(1120px,calc(100% - 28px));margin:18px auto 50px;background:var(--paper);border:1px solid #77705f;box-shadow:0 14px 34px rgba(45,40,25,.16)}
+.browserbar{display:flex;align-items:center;gap:8px;padding:6px 8px;background:#d8d2c3;border-bottom:1px solid #817a69;font:12px var(--archive-type);color:#4b493f}
+.dots{display:flex;gap:4px}.dots i{display:block;width:10px;height:10px;border:1px solid #777;background:#eee7d6}.address{flex:1;background:#fffdf4;border:1px inset #bbb29a;padding:3px 8px;font:12px var(--archive-type);white-space:nowrap;overflow:hidden}
+.mast{padding:34px 40px 28px;border-bottom:1px solid var(--line);position:relative;background:linear-gradient(rgba(255,255,255,.15),rgba(255,255,255,.15)),var(--paper)}
+.eyebrow{font:12px var(--archive-type);letter-spacing:.13em;text-transform:uppercase;color:var(--red);margin-bottom:8px}.mast h1{font-family:var(--archive-serif);font-size:clamp(48px,8vw,92px);line-height:.92;letter-spacing:-.045em;text-transform:uppercase;margin:0 0 14px}.mast p{font-family:var(--archive-type);font-size:19px;line-height:1.55;max-width:760px;margin:0;color:#3e3b31}.stamp{position:absolute;right:38px;top:32px;border:2px solid var(--red);color:var(--red);padding:7px 10px;font:11px var(--archive-type);letter-spacing:.08em;text-transform:uppercase;transform:rotate(2deg)}
+.utility{display:flex;justify-content:space-between;gap:12px;align-items:center;background:var(--olive);color:#fff;padding:9px 14px;font:13px var(--archive-type)}.utility button{border:0;background:transparent;color:#fff;text-decoration:underline;padding:3px 0}.utility span{opacity:.9}
+main{padding:36px 40px 58px}.intro{display:grid;grid-template-columns:1.4fr .6fr;gap:34px;padding-bottom:34px;border-bottom:1px solid var(--line)}.intro p{font-family:var(--archive-type);font-size:17px;line-height:1.65;margin:0 0 13px}.accession{border:1px solid var(--line);background:#fff9e7;padding:17px 18px}.accession h2{font:700 13px var(--archive-type);text-transform:uppercase;letter-spacing:.08em;color:var(--red);margin:0 0 12px}.accession dl{display:grid;grid-template-columns:78px 1fr;gap:6px 10px;margin:0;font:12px/1.5 var(--archive-type)}.accession dt{color:var(--red)}.accession dd{margin:0}
+.section{padding:38px 0;border-bottom:1px solid var(--line)}.section:last-child{border-bottom:0}.section-title{display:flex;justify-content:space-between;gap:24px;align-items:end;margin-bottom:22px}.section-title h2{font-family:var(--archive-serif);font-size:40px;line-height:1;margin:0}.section-title p{margin:0;max-width:470px;font:14px/1.6 var(--archive-type);color:var(--muted)}
+
+/* entry choices */
+.entrygrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:stretch}.entry{width:100%;border:1px solid #9e957b;background:var(--paper2);padding:20px 20px 18px;text-align:left;min-height:215px;box-shadow:3px 3px 0 #ddd3b6;display:flex;flex-direction:column;justify-content:space-between;color:var(--ink)}.entry .num{font:12px var(--archive-type);color:var(--red);letter-spacing:.08em;text-transform:uppercase}.entry h3{font-family:var(--archive-serif);font-size:31px;line-height:1.05;margin:7px 0 10px}.entry p{font-family:var(--archive-type);font-size:15px;line-height:1.5;color:#49463b;margin:0}.searchentry{display:flex;flex-direction:column}.searchentry>div{min-width:0}.searchentry form{display:flex;gap:6px;margin-top:18px}.searchentry input{min-width:0;flex:1;border:1px solid #a99f84;background:#fffef7;padding:9px 10px;font:14px var(--archive-type);color:var(--ink)}.entryaction,.searchentry button{border:1px solid #555a3c;background:var(--olive);color:#fff;padding:9px 11px;font:14px var(--archive-type);text-align:left;align-self:flex-start}.entryaction:hover,.entryaction:focus-visible,.searchentry button:hover,.searchentry button:focus-visible{background:var(--olive2);outline:2px solid #d8cfac;outline-offset:2px}
+
+/* chooser and results */
+#workspace{display:none}.workspacebar{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:13px 15px;background:#ece5cd;border:1px solid var(--line);margin-bottom:18px}.workspacebar strong{font-family:var(--archive-serif);font-size:23px}.workspacebar span{font:13px var(--archive-type);color:var(--muted)}.backbtn{border:1px solid #8f866f;background:#fff9e7;padding:7px 10px;font:13px var(--archive-type);color:#333}.filterlist{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}.filterbtn{border:1px solid #9d947a;background:#fff9e7;padding:8px 10px;font:13px var(--archive-type);color:#39372f}.filterbtn.active{background:var(--olive);border-color:var(--olive);color:#fff}.resultsmeta{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font:12px var(--archive-type);color:var(--muted);margin-bottom:15px}.recordlist{display:grid;gap:12px}.recordcard{width:100%;display:grid;grid-template-columns:112px 1fr auto;gap:18px;align-items:center;text-align:left;border:1px solid #aaa084;background:#fffaf0;padding:16px 18px;color:var(--ink);box-shadow:2px 2px 0 #ddd3b5}.recordcard:hover{border-color:#6f7350}.recordmeta{font:11px/1.5 var(--archive-type);color:var(--red);text-transform:uppercase}.recordicon{width:34px;height:34px;margin-bottom:8px;color:#4b4d38}.recordicon svg{display:block;width:34px;height:34px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.recordbody h3{font-family:var(--archive-serif);font-size:28px;line-height:1.1;margin:0 0 6px}.recordbody p{font-family:var(--archive-type);font-size:15px;line-height:1.55;margin:0;color:#4c493e}.openlabel{font:12px var(--archive-type);color:var(--blue);text-decoration:underline;white-space:nowrap}.empty{display:none;padding:22px;border:1px dashed var(--line);font:13px var(--archive-type);color:var(--muted)}
+
+.fragments{display:grid;grid-template-columns:1fr;gap:15px;padding:8px 4px}.fragment{position:relative;border:1px solid #b7aa86;background:linear-gradient(rgba(255,255,255,.28),rgba(255,255,255,.08)),#f7edcf;padding:20px 26px 17px;box-shadow:3px 4px 0 rgba(74,59,25,.10);background-image:repeating-linear-gradient(0deg,transparent 0 29px,rgba(77,103,157,.075) 30px)}.fragment:nth-child(odd),.fragment:nth-child(even){transform:none}.fragment::before{content:"";position:absolute;top:-8px;left:48%;width:56px;height:16px;background:rgba(205,191,147,.66);transform:rotate(-1deg);box-shadow:0 1px 1px rgba(70,55,20,.08)}.fragment q{display:block;font-family:var(--archive-serif);font-size:22px;line-height:1.5;color:#29261d;text-wrap:pretty;max-width:100%}.fragment footer{margin-top:11px;padding-top:8px;border-top:1px dashed #b7aa86;font:12px/1.55 var(--archive-type);color:#575244}
+.trail{background:var(--dark);color:#eee9d8;padding:12px 14px;font:12px var(--archive-type);display:flex;gap:8px;flex-wrap:wrap}.trail button{border:0;background:none;color:#cdd6ff;text-decoration:underline;font:12px var(--archive-type);padding:0}
+.about{display:grid;grid-template-columns:1.15fr .85fr;gap:28px}.aboutcopy h2{font-family:var(--archive-serif);font-size:46px;line-height:1.05;margin:0 0 14px;color:#232117}.aboutcopy p{font-family:var(--archive-type);font-size:17px;line-height:1.72;margin:0 0 16px;color:#2f2b21;max-width:58ch}.note{border-left:4px solid var(--olive);background:#fffaf0;padding:18px;font:14px/1.65 var(--archive-type)}
+footer.sitefooter{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;background:#252820;color:#e9e4d2;padding:10px 14px;font:11px var(--archive-type)}
+
+/* record dialog */
+.overlay{position:fixed;inset:0;background:rgba(30,29,24,.55);display:none;align-items:center;justify-content:center;padding:22px;z-index:1000}.overlay.open{display:flex}.dialog{width:min(780px,96vw);max-height:88vh;background:#fffaf0;border:1px solid #555147;box-shadow:0 24px 60px rgba(0,0,0,.32)}.dialogbar{display:flex;justify-content:space-between;align-items:center;background:var(--olive);color:#fff;padding:7px 9px;font:13px var(--archive-type)}.dialogbar button{width:30px;height:30px;border:1px solid #3f3b31;background:#fffaf0;color:#2c2a24;font:700 20px/1 var(--archive-type);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:1px 1px 0 rgba(0,0,0,.18)}.dialogbar button:hover,.dialogbar button:focus-visible{background:#efe3bd;color:#111;outline:2px solid #fffaf0;outline-offset:2px}.recordpaper{max-height:calc(88vh - 40px);overflow:auto;padding:30px 34px 36px}.recordpaper .recordid{font:12px var(--archive-type);color:var(--red);letter-spacing:.08em;text-transform:uppercase}.recordpaper h2{font-family:var(--archive-serif);font-size:48px;line-height:1;margin:7px 0 10px}.recordpaper .submeta{font:11px/1.5 var(--archive-type);color:var(--muted);padding-bottom:15px;border-bottom:1px solid var(--line)}.recordpaper h3{font:700 12px var(--archive-type);letter-spacing:.07em;text-transform:uppercase;color:var(--red);margin:25px 0 7px}.recordpaper p{font-family:var(--archive-type);font-size:17px;line-height:1.7;margin:0 0 12px;text-wrap:pretty;hyphens:none}.recordpaper p:last-child{margin-bottom:0}.recordpaper p strong{font-weight:700;color:#292720}.fieldnote{border-left:4px solid #a49668;background:#f5eed6;padding:14px 16px}.actors{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0 2px}.actorchip{display:inline-flex;align-items:center;gap:6px;border:1px solid #b4aa8e;background:#f8f0d8;padding:5px 8px;font:11px var(--archive-type);text-transform:uppercase;letter-spacing:.035em;color:#4b473b}.actorchip svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}.contextbox{border:1px solid #c2b89b;background:#fffdf3;padding:13px 15px}.contextbox p{margin:0}.extras{display:grid;gap:9px;margin-top:8px}.extrafact{border-left:3px solid var(--olive);background:#f1ead1;padding:11px 13px}.extrafact > strong{display:block;font:11px var(--archive-type);letter-spacing:.06em;text-transform:uppercase;color:var(--red);margin-bottom:4px}.extrafact p{margin:0;max-width:68ch;font-size:16px;line-height:1.72;text-wrap:wrap}.extrafact p+p{margin-top:10px}.question{margin:24px 0;padding:15px 0;border-top:1px solid #3f3b31;border-bottom:1px solid #3f3b31;font-family:var(--archive-serif);font-size:26px;line-height:1.4}.related{display:flex;flex-wrap:wrap;gap:7px}.related button{border:1px solid #9e957b;background:#f5eed6;padding:7px 9px;font:12px var(--archive-type);color:var(--blue);text-decoration:underline}.annotation{margin-top:24px;background:#fff5c9;border:1px solid #a99e7c;padding:13px}.annotation label{display:block;font:12px var(--archive-type);color:var(--red);text-transform:uppercase;margin-bottom:7px}.annotation textarea{width:100%;min-height:100px;border:1px solid #b7aa85;background:#fffdf1;padding:8px;font:15px/1.6 var(--archive-type)}.saved{font:11px var(--archive-type);color:#3e6a42;min-height:15px;margin-top:4px}.source{margin-top:22px;padding-top:10px;border-top:1px dashed var(--line);font:12px/1.55 var(--archive-type);color:var(--muted)}
+
+@media(max-width:820px){.intro,.about{grid-template-columns:1fr}.entrygrid{grid-template-columns:1fr}.entry{min-height:0}.searchentry form{max-width:520px}.recordcard{grid-template-columns:90px 1fr}.openlabel{grid-column:2}.stamp{position:static;display:inline-block;margin-top:18px}.section-title{display:block}.section-title p{margin-top:10px}}
+@media(max-width:560px){.shell{width:100%;margin:0;border-left:0;border-right:0}.mast,main{padding-left:18px;padding-right:18px}.address{display:none}.recordcard{grid-template-columns:1fr}.openlabel{grid-column:auto}.recordpaper{padding:24px 18px 30px}.recordpaper h2{font-size:36px}.fragments{grid-template-columns:1fr}.utility{align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="browserbar"><div class="dots"><i></i><i></i><i></i></div><div class="address">http://field-archive.local/what-gets-remembered/</div><div>CONNECTED</div></div>
+
+  <header class="mast">
+    <div class="eyebrow">Field archive // October 2026</div>
+    <h1>What Gets Remembered?</h1>
+    <p>A small collection assembled from one visit to the Internet Archive in San Francisco.</p>
+    <div class="stamp">8 records<br>open collection</div>
+  </header>
+
+  <div class="utility"><span>FIELD ARCHIVE WGR-2026</span><div><button id="randomBtn">open a random record</button> · <button id="aboutBtn">about this archive</button></div></div>
+
+  <main>
+    <section class="intro">
+      <div>
+        <div class="eyebrow">Accession note</div>
+        <p>In October 2026, I visited the Internet Archive and recorded observations from a tour of its collections, infrastructure, and preservation work.</p>
+        <p>This site turns a small number of those observations into records. It is not a complete account of the Internet Archive. It is a selective reconstruction of one visit, shaped by what was recorded, what was chosen for inclusion, and how the material is organized here.</p>
+        <p>You can enter through search, browse by material or question, open a random record, or follow links between related records. Different paths may make different parts of the collection easier to notice.</p>
+        <p><strong>Choose how you want to enter the collection.</strong></p>
+      </div>
+      <aside class="accession"><h2>Collection record</h2><dl><dt>CREATOR</dt><dd>Rachael</dd><dt>DATE</dt><dd>October 2026</dd><dt>PLACE</dt><dd>San Francisco, CA</dd><dt>EXTENT</dt><dd>8 records</dd><dt>STATUS</dt><dd>Open / incomplete</dd></dl></aside>
+    </section>
+
+    <section class="section" id="enter">
+      <div class="section-title"><div><div class="eyebrow">Enter the collection</div><h2>Choose a path</h2></div><p>The same records can be encountered in different ways. You do not need to begin with a question.</p></div>
+      <div class="entrygrid">
+        <div class="entry searchentry">
+          <div><div class="num">Path 01</div><h3>Search</h3><p>Start with a word, name, medium, or idea you already have in mind.</p></div>
+          <form id="searchForm"><input id="searchInput" type="search" placeholder="e.g. books, software, access" aria-label="Search the archive"><button type="submit">Search</button></form>
+        </div>
+        <div class="entry"><div><div class="num">Path 02</div><h3>Browse by material</h3></div><button class="entryaction" id="materialEntry">Browse materials →</button></div>
+        <div class="entry"><div><div class="num">Path 03</div><h3>Browse by question</h3></div><button class="entryaction" id="questionEntry">Browse questions →</button></div>
+      </div>
+    </section>
+
+    <section class="section" id="workspace">
+      <div class="workspacebar"><div><span id="workspaceKind">BROWSE</span><br><strong id="workspaceTitle">Collection</strong></div><button class="backbtn" id="backBtn">← choose another path</button></div>
+      <div class="filterlist" id="filterlist"></div>
+      <div class="resultsmeta"><span id="activePath">ALL RECORDS</span><span><b id="visibleCount">8</b> RECORD(S)</span></div>
+      <div class="recordlist" id="recordlist"></div>
+      <div class="empty" id="empty">No records found. Try another search or pathway.</div>
+    </section>
+
+    <section class="section">
+      <div class="section-title"><div><div class="eyebrow">Loose papers</div><h2>Fragments from the visit</h2></div><p>These fragments are left without a conclusion. Treat them as material to interpret.</p></div>
+      <div class="fragments">
+        <div class="fragment"><q>universal access to all knowledge</q><footer>The mission used to frame the tour.</footer></div>
+        <div class="fragment"><q>one trillion web pages</q><footer>A milestone used to communicate the scale of the Wayback Machine.</footer></div>
+        <div class="fragment"><q>about 3,000 books a day</q><footer>Digitization across 19 scanning centers, with a person turning each page.</footer></div>
+        <div class="fragment"><q>over 100 channels from <strong>57 countries</strong></q><footer>The television news collection described during the visit.</footer></div>
+        <div class="fragment"><q>went to sleep on a floppy and woke up in a browser</q><footer>The software-emulation demonstration.</footer></div>
+        <div class="fragment"><q>you can go and hit upload</q><footer>The tour emphasized that users can contribute material and create collections.</footer></div>
+        <div class="fragment"><q>40 or 50 concerts a day</q><footer>The speaker's estimate for uploads from participating band and taper communities.</footer></div>
+        <div class="fragment"><q>16 pictures</q><footer>One step in the microfiche workflow before stitching, AI-proposed crops, human approval, and OCR.</footer></div>
+        <div class="fragment"><q>three shipping containers of things coming in</q><footer>The speaker's description of a typical week's physical intake.</footer></div>
+        <div class="fragment"><q>almost 200 of us cast in porcelain</q><footer>Staff figures commemorating page turners, programmers, department leads, and other workers.</footer></div>
+      </div>
+    </section>
+
+    <section class="section"><div class="section-title"><div><div class="eyebrow">Your route</div><h2>Browsing trail</h2></div><p>A small trace of the records you opened during this visit.</p></div><div class="trail" id="trail"><span>nothing opened yet</span></div></section>
+
+    <section class="section about" id="about">
+      <div class="aboutcopy"><div class="eyebrow">About this archive</div><h2>One visit, eight records.</h2><p>This site was assembled from notes taken during a single visit to the Internet Archive. I chose which moments to turn into records and which material to leave out.</p><p>The collection is intentionally small. Its purpose is not to explain the Internet Archive in full, but to preserve a few encounters that can be examined from different directions.</p></div>
+      <div class="note"><strong>CURATOR'S NOTE</strong><br><br>The same eight records can be entered through search, material, question, a random record, or links between records. Notice what changes as you move between paths.</div>
+    </section>
+  </main>
+
+  <footer class="sitefooter"><span>WHAT GETS REMEMBERED // FIELD ARCHIVE // 2026</span><span>8 records · 1 visit · incomplete by design</span><span>Source: Brewster Kahle, guided tour of the Internet Archive, San Francisco, October 2026; field notes and transcript by Rachael Akwa.</span></footer>
+</div>
+
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="recordTitle" aria-hidden="true">
+  <div class="dialog">
+    <div class="dialogbar"><span id="windowTitle">ARCHIVE RECORD</span><button id="closeRecord" aria-label="Close">×</button></div>
+    <div class="recordpaper" id="recordpaper"></div>
+  </div>
+</div>
+
+<script>
+const icons={
+web:`<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M4 12h16M12 4c2.2 2.3 3.3 5 3.3 8S14.2 17.7 12 20c-2.2-2.3-3.3-5-3.3-8S9.8 6.3 12 4"/><path d="M6.5 6.7 4.5 4.8M4.5 4.8v3.4M4.5 4.8h3.4"/></svg>`,
+government:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9h18M5 9v8M9 9v8M15 9v8M19 9v8M3 18h18M2 21h20M12 3l9 4H3l9-4Z"/></svg>`,
+book:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5c2.7-.7 5.3-.3 8 1.2v12c-2.7-1.5-5.3-1.9-8-1.2v-12ZM20 5.5c-2.7-.7-5.3-.3-8 1.2v12c2.7-1.5 5.3-1.9 8-1.2v-12Z"/><path d="M8 3v2M16 3v2"/></svg>`,
+software:`<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M7 6h8v5H7zM8 16h8M8 19h5M17 6h1v1h-1z"/></svg>`,
+tv:`<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="1"/><path d="m8 3 4 3 4-3M8 16h8M17.5 10.5h.01M17.5 13.5h.01"/></svg>`,
+discovery:`<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="m15.5 15.5 5 5M8 11h6M11 8v6"/></svg>`,
+storage:`<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="5" rx="1"/><rect x="4" y="10" width="16" height="5" rx="1"/><rect x="4" y="17" width="16" height="4" rx="1"/><path d="M7 5.5h.01M7 12.5h.01M7 19h.01M10 5.5h7M10 12.5h7M10 19h7"/></svg>`,
+access:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V4h10v16M14 12h6M17 9l3 3-3 3"/><circle cx="10.5" cy="12" r=".7"/></svg>`
+};
+
+const actorIcons={
+staff:`<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="3"/><path d="M6 20c.5-4 2.5-7 6-7s5.5 3 6 7"/></svg>`,
+archive:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9h18M5 9v9M9 9v9M15 9v9M19 9v9M3 19h18M12 3l9 4H3l9-4Z"/></svg>`,
+government:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9h18M5 9v8M9 9v8M15 9v8M19 9v8M3 18h18M2 21h20M12 3l9 4H3l9-4Z"/></svg>`,
+partner:`<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="7" cy="8" r="3"/><circle cx="17" cy="8" r="3"/><path d="M2.5 20c.4-3.4 2-5.5 4.5-5.5S11.1 16.6 11.5 20M12.5 20c.4-3.4 2-5.5 4.5-5.5s4.1 2.1 4.5 5.5M10 9.5h4"/></svg>`,
+creator:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M7 17l9-9 3 3-9 9H7v-3ZM15 9l3 3"/></svg>`,
+technology:`<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="12" rx="1"/><path d="M8 21h8M12 17v4M7 9h10M7 12h6"/></svg>`,
+infrastructure:`<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="5" rx="1"/><rect x="4" y="10" width="16" height="5" rx="1"/><rect x="4" y="17" width="16" height="4" rx="1"/><path d="M7 5.5h.01M7 12.5h.01M7 19h.01"/></svg>`,
+publisher:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l3 3v15H6zM15 3v4h4M9 11h6M9 15h6"/></svg>`,
+law:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v17M6 6h12M5 6l-3 6h6L5 6ZM19 6l-3 6h6l-3-6ZM8 21h8"/></svg>`,
+community:`<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="10" r="2.5"/><path d="M3 20c.5-4 2.4-6.5 6-6.5S14.5 16 15 20M14 15c3.3-.8 5.8 1.2 6.5 5"/></svg>`,
+user:`<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="8" r="3"/><path d="M4 20c.5-4 2.3-7 6-7s5.5 3 6 7M16 13l5 5M18.5 15.5 21 13"/></svg>`
+};
+
+const records=[
+{id:'WGR-001',icon:'web',title:'The Wayback Machine at Scale',material:'Web',materialKey:'web',questions:['survival','discovery','power'],summary:'One trillion archived web pages, assembled through a much larger network than one institution.',record:'The tour described the <strong>Wayback Machine</strong> as a record of the changing web. Early web archiving took snapshots on a regular schedule.||Today, the process is more distributed: the speaker described <strong>roughly 1,500 libraries</strong> using Internet Archive services to crawl their own parts of the web, with those captures brought together in the Wayback Machine.',field:'The tour described a milestone of <strong>one trillion archived web pages</strong> and said the collection can grow by <strong>around a billion URLs</strong> on a given day.||The speaker also stressed that participation is not limited to institutions: users can upload material, create collections, and join communities that contribute to the archive.',context:'People and organizations publish websites; partner libraries choose portions of the web to crawl; automated systems capture pages; and the Internet Archive combines and stores those captures.||During the same tour, the speaker also described news sites that use <strong>paywalls or technical blocks</strong> that can prevent libraries from capturing material that appears on the live web.',extra:[['Community contribution','Later in the tour, the speaker described band and taper communities that upload live recordings.||The estimate given was <strong>roughly 40–50 concert uploads per day</strong>, with <strong>thousands of participating bands</strong>.||The example showed a collection growing because communities chose to contribute material rather than because an archive independently captured it.']],actors:[['creator','Website creators'],['partner','Partner libraries'],['community','Contributing communities'],['user','Uploaders'],['archive','Internet Archive'],['technology','Web crawlers'],['infrastructure','Storage']],question:'What can an archive this large preserve, and what might still never enter it?',related:['WGR-002','WGR-006']},
+{id:'WGR-002',icon:'government',title:'Government Websites at Transition',material:'Government records',materialKey:'government',questions:['survival','power','labor'],summary:'Copies of public websites made before and after changes in political administrations.',record:'The tour described archiving <strong>U.S. government websites</strong> around presidential transitions, with this work taking place repeatedly <strong>since 2004</strong>.||The speaker presented archived copies as a way to compare earlier and later versions of public webpages and datasets.',field:'The tour argued that saved copies matter because the same institution that publishes a public record may later revise or remove it. The speaker pointed to archived versions as evidence that changes had occurred.',context:'The tour placed this work in a longer history of public-information distribution.||It described the <strong>Federal Depository Library system</strong>, in which <strong>roughly 1,100 U.S. libraries</strong> received government publications, followed by eras of microfiche and then born-digital government information.||The current web-archiving work was described as involving the Internet Archive and other library or archival partners.',extra:[['From microfiche to searchable text','A live demonstration showed government microfiche being digitized in <strong>Richmond</strong>.||The scanner took <strong>16 images</strong>, which were stitched together into one larger image.||<strong>AI</strong> proposed page crops, and <strong>a person approved the crops</strong>.||Finally, <strong>OCR</strong> converted the pages into searchable text that could also support read-aloud access.']],actors:[['government','Government agencies'],['archive','Internet Archive'],['partner','Library partners'],['staff','Digitization staff'],['technology','Web crawlers + OCR'],['user','Researchers / public']],question:'Who should hold copies of public information when the publisher can also change the record?',related:['WGR-001','WGR-008']},
+{id:'WGR-003',icon:'book',title:'The Book Scanner',material:'Books',materialKey:'books',questions:['preservation','labor','access'],summary:'A large digitization operation that still depends on a person turning every page.',record:'At the scanning center, the tour described <strong>19 scanning centers around the world</strong> and <strong>roughly 3,000 books digitized per day</strong>.||The scanning system was designed to work non-destructively, without forcing books flat.',field:'For every book, <strong>a person turns each page</strong>.||During the visit, the scanner was working with material from a substance-abuse library network; the speaker said some programs and libraries facing closure or defunding had donated materials to the archive.',context:'Before a scan appears online, a physical copy has to reach the archive, be handled, positioned, photographed, checked, processed, stored, and made available through technical systems.||The tour also described keeping physical copies after digitization rather than treating the digital scan as a replacement for the original.',extra:[['Labor made visible','Elsewhere in the building, the tour stopped at <strong>nearly 200 porcelain staff figures</strong>.||They were described as commemorating people who had worked at the archive, including page turners, programmers, and department leads.']],actors:[['staff','Scanning staff'],['archive','Internet Archive'],['technology','Scanning systems'],['partner','Donating libraries'],['infrastructure','Physical storage']],question:'What work disappears from view once a physical book becomes a clean digital scan?',related:['WGR-007','WGR-008']},
+{id:'WGR-004',icon:'software',title:'Prince of Persia in a Browser',material:'Software',materialKey:'software',questions:['preservation','access','labor'],summary:'An old game preserved as something you can still run, not just a file you can store.',record:'The tour demonstrated old software through browser-based emulation.||The speaker described taking existing emulators, compiling them into <strong>JavaScript</strong>, and effectively booting an older computer inside a modern browser so archived software could still run.',field:'<strong>Prince of Persia</strong> was described as an old game that had “gone to sleep on a floppy” and “woke up in a browser.”||The tour also described communities collecting floppy disks, ROMs, and other old software, and estimated a collection of <strong>roughly 1.4 million software titles</strong>.',context:'The original program was created for hardware and operating environments that may no longer be common.||The browser demonstration depended on preserved software, emulator knowledge, archive programming work, and a modern interface that could recreate enough of an older computing environment to run the program.',extra:[['Community technical knowledge','The speaker credited <strong>volunteer emulator communities</strong> as part of the effort that made browser-based access possible.']],actors:[['creator','Software creators'],['community','Software + emulator communities'],['staff','Archive programmers'],['technology','Browser + emulator'],['user','Players / researchers']],question:'If the file survives but the interaction does not, what exactly has been preserved?',related:['WGR-003','WGR-007']},
+{id:'WGR-005',icon:'tv',title:'Television News Archive',material:'Television',materialKey:'television',questions:['survival','power','discovery'],summary:'More than 100 channels from 57 countries, transformed from broadcast video into searchable material.',record:'The tour described recording <strong>more than 100 television channels</strong> from <strong>57 countries</strong>, with particular attention to <strong>conflict zones</strong>.||Audio can be extracted from broadcasts, turned into text, translated, searched, and summarized.',field:'The demonstration showed television speech being searched across time and filtered by network.||The speaker described the goal as making television usable and referenceable in ways closer to newspapers, where a researcher can locate, quote, and compare specific passages.',context:'The archive has to decide which channels, countries, periods, and conflict zones to record.||After capture, transcription, translation, and search tools create additional ways of encountering the same broadcast material.',extra:[['A changing source','The tour treated television as one part of a wider media environment in which news moves across broadcast, web, social media, and other platforms.||The archive therefore records one portion of a larger information system rather than a complete record of public communication.']],actors:[['publisher','Broadcasters'],['government','State media / governments'],['archive','Internet Archive'],['staff','Collection staff'],['technology','Transcription + translation'],['user','Researchers']],question:'When an archive cannot record every broadcast, what should determine the boundaries of the collection?',related:['WGR-001','WGR-006']},
+{id:'WGR-006',icon:'discovery',title:'Making the Web Browsable',material:'Interface / web',materialKey:'interface',questions:['discovery','access','power'],summary:'A visual interface built to help people wander through an archive too large to grasp as a list of search results.',record:'The tour showed a visualization developed with the <strong>National Library of the Netherlands</strong> that lets users move through archived websites and play past versions over time.||It was presented as one attempt to communicate the breadth of the web archive in a form other than ordinary search.',field:'The speaker contrasted the enormous scale of the web with the narrow slice visible through a conventional search interface.||The visualization instead let visitors zoom through sites and time periods before choosing a specific page.',context:'The demonstration exposed the same underlying collection through a different arrangement.||A conventional search box, a spatial visualization, and a timeline can each surface different portions of the archive and different relationships among records.',extra:[['A boundary inside the interface','While demonstrating the visualization, the speaker mentioned that some material had been filtered out.||Even a tool designed for open-ended exploration therefore included prior decisions about what a visitor could encounter.']],actors:[['archive','Internet Archive Europe'],['partner','National Library of the Netherlands'],['staff','Interface designers'],['technology','Visualization'],['user','Visitors / researchers']],question:'How do you explore an archive when you do not yet know what you are looking for?',related:['WGR-001','WGR-005']},
+{id:'WGR-007',icon:'storage',title:'Copies in Multiple Places',material:'Infrastructure',materialKey:'infrastructure',questions:['survival','preservation','labor'],summary:'Physical objects, servers, buildings, and maintenance work are all part of keeping a digital archive alive.',record:'The visit moved from physical storage to the server room.||The tour described keeping physical copies after digitization and maintaining digital copies in several locations, including another copy in <strong>Richmond</strong> and partial copies in <strong>Canada</strong>, <strong>Europe</strong>, and the <strong>Library of Alexandria in Egypt</strong>.',field:'In the server room, the speaker said the visible machines held only part of the primary collection.||The blinking lights were described as corresponding to people uploading or downloading material, turning otherwise abstract infrastructure into a visible trace of use.',context:'The physical collection was described as boxes on pallets, pallets in shipping containers, and shipping containers stored inside buildings.||The speaker estimated <strong>roughly three shipping containers of material arriving in a week</strong> and <strong>around 12 million physical objects</strong> across the broader physical collection.',extra:[['Maintenance is ongoing','Near the end of the tour, the speaker described staff responding to a serious <strong>PHP vulnerability</strong>.||Staff monitored attacks, inspected code, patched systems, and tested their defenses.||The site was briefly taken down before being brought back online.'],['Redundancy across places','The tour described multiple digital copies in different geographic locations rather than relying on a single server room or building.']],actors:[['staff','Operations + security staff'],['archive','Internet Archive'],['infrastructure','Servers'],['infrastructure','Buildings + physical storage'],['technology','Software maintenance'],['partner','Other archive locations']],question:'What does “preserved” mean if survival depends on copies, formats, buildings, maintenance, and people continually keeping systems usable?',related:['WGR-003','WGR-004']},
+{id:'WGR-008',icon:'access',title:'Different Kinds of Access',material:'Access',materialKey:'access',questions:['power','access','preservation'],summary:'Preservation does not automatically mean that every user can access or control a work in the same way.',record:'The tour described several access conditions.||Public-domain works could be made broadly available. Print-disabled users could receive forms of access that support reading or enlargement. Interlibrary loan could provide chapters or articles.||Other digitized works were shaped by lending rules, copyright, and legal restrictions.',field:'<strong>“Universal access to all knowledge”</strong> framed the tour, while the examples included books physically owned by the archive, digitized, and then lent <strong>one reader at a time</strong>.||The speaker also contrasted locally owned <strong>MP3 files</strong> with <strong>streaming services</strong> that provide access through licenses rather than possession of a copy.',context:'The speaker extended the ownership-versus-license distinction beyond music to video, books, and scientific literature.||The tour framed this shift as relevant to preservation because a platform or rightsholder may retain the ability to alter or remove material that users can access but do not own.',extra:[['Institutional purpose','When asked about the <strong>Library of Congress</strong>, the speaker described the two institutions as having different emphases.||He characterized the <strong>Internet Archive</strong> as particularly focused on access and the <strong>Library of Congress</strong> as more preservation-oriented.||This comparison reflects the speaker’s account during the visit, not a comprehensive description of either institution.']],actors:[['archive','Internet Archive'],['law','Copyright / law'],['publisher','Publishers / rightsholders'],['user','Readers / subscribers'],['staff','Library staff'],['technology','Access platforms']],question:'If access to a work depends on a license, legal category, or platform rather than possession of a copy, who has the power to keep that work available?',related:['WGR-002','WGR-003']}
+];
+
+const questionDefs=[
+  ['survival','What survives?'],['power','Who can change the record?'],['preservation','What counts as preserved?'],['labor','Who does the work?'],['discovery','How do you find it?'],['access','Who can use it?']
+];
+const materialDefs=[
+  ['web','Web'],['books','Books & print'],['government','Government records'],['television','Television'],['software','Software'],['interface','Interface / discovery'],['infrastructure','Infrastructure'],['access','Access']
+];
+
+const workspace=document.getElementById('workspace');
+const list=document.getElementById('recordlist');
+const count=document.getElementById('visibleCount');
+const empty=document.getElementById('empty');
+const filters=document.getElementById('filterlist');
+const activePath=document.getElementById('activePath');
+const workspaceTitle=document.getElementById('workspaceTitle');
+const workspaceKind=document.getElementById('workspaceKind');
+let currentMode='';
+let trail=[];
+
+function renderRecords(items){
+  list.innerHTML='';
+  items.forEach(r=>{
+    const b=document.createElement('button');
+    b.className='recordcard';
+    b.innerHTML=`<div class="recordmeta"><div class="recordicon">${icons[r.icon]}</div>${r.id}<br>${r.material}</div><div class="recordbody"><h3>${r.title}</h3><p>${r.summary}</p></div><div class="openlabel">open record →</div>`;
+    b.addEventListener('click',()=>openRecord(r.id));
+    list.appendChild(b);
+  });
+  count.textContent=items.length;
+  empty.style.display=items.length?'none':'block';
+}
+
+function showWorkspace(mode){
+  currentMode=mode;
+  workspace.style.display='block';
+  filters.innerHTML='';
+  if(mode==='material'){
+    workspaceKind.textContent='BROWSE BY MATERIAL';
+    workspaceTitle.textContent='Choose a material';
+    materialDefs.forEach(([key,label])=>makeFilter(key,label,'material'));
+    activePath.textContent='SELECT A MATERIAL';
+    renderRecords(records);
+  }else if(mode==='question'){
+    workspaceKind.textContent='BROWSE BY QUESTION';
+    workspaceTitle.textContent='Choose a question';
+    questionDefs.forEach(([key,label])=>makeFilter(key,label,'question'));
+    activePath.textContent='SELECT A QUESTION';
+    renderRecords(records);
+  }
+  workspace.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function makeFilter(key,label,mode){
+  const b=document.createElement('button');
+  b.className='filterbtn';
+  b.textContent=label;
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.filterbtn').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    const items=mode==='material'?records.filter(r=>r.materialKey===key):records.filter(r=>r.questions.includes(key));
+    workspaceTitle.textContent=label;
+    activePath.textContent=(mode==='material'?'MATERIAL: ':'QUESTION: ')+label.toUpperCase();
+    renderRecords(items);
+  });
+  filters.appendChild(b);
+}
+
+function doSearch(q){
+  currentMode='search';
+  const term=q.trim().toLowerCase();
+  workspace.style.display='block';
+  filters.innerHTML='';
+  workspaceKind.textContent='SEARCH';
+  workspaceTitle.textContent=term?`Results for “${q.trim()}”`:'All records';
+  activePath.textContent=term?`SEARCH: ${q.trim().toUpperCase()}`:'ALL RECORDS';
+  const items=term?records.filter(r=>[r.id,r.title,r.material,r.summary,r.record,r.field,r.context,...(r.extra||[]).flat(),r.question,...r.questions,...r.actors.flat()].join(' ').toLowerCase().includes(term)):records;
+  renderRecords(items);
+  workspace.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+document.getElementById('materialEntry').addEventListener('click',()=>showWorkspace('material'));
+document.getElementById('questionEntry').addEventListener('click',()=>showWorkspace('question'));
+document.getElementById('searchForm').addEventListener('submit',e=>{e.preventDefault();doSearch(document.getElementById('searchInput').value)});
+document.getElementById('backBtn').addEventListener('click',()=>{workspace.style.display='none';document.getElementById('enter').scrollIntoView({behavior:'smooth',block:'start'})});
+document.getElementById('aboutBtn').addEventListener('click',()=>document.getElementById('about').scrollIntoView({behavior:'smooth'}));
+document.getElementById('randomBtn').addEventListener('click',()=>openRecord(records[Math.floor(Math.random()*records.length)].id));
+
+function renderParagraphs(value){return String(value).split('||').map(part=>`<p>${part.trim()}</p>`).join('');}
+
+const overlay=document.getElementById('overlay');
+const paper=document.getElementById('recordpaper');
+let lastFocus=null;
+function openRecord(id){
+  const r=records.find(x=>x.id===id); if(!r)return;
+  if(!overlay.classList.contains('open')) lastFocus=document.activeElement;
+  trail=trail.filter(x=>x!==id); trail.push(id); trail=trail.slice(-6); renderTrail();
+  document.getElementById('windowTitle').textContent=`ARCHIVE RECORD // ${r.id}`;
+  paper.innerHTML=`<div class="recordid">${r.id} // ${r.material}</div><h2 id="recordTitle">${r.title}</h2><div class="submeta">FIELD VISIT · SAN FRANCISCO · OCTOBER 2026 · CURATED FRAGMENT</div><h3>Record description</h3>${renderParagraphs(r.record)}<h3>From the field notes</h3><div class="fieldnote">${renderParagraphs(r.field)}</div><h3>Context around the record</h3><div class="contextbox">${renderParagraphs(r.context)}</div>${r.extra?.length?`<h3>More from the visit</h3><div class="extras">${r.extra.map(([label,body])=>`<div class="extrafact"><strong>${label}</strong>${renderParagraphs(body)}</div>`).join('')}</div>`:''}<h3>Actors in this record</h3><div class="actors">${r.actors.map(([type,label])=>`<span class="actorchip">${actorIcons[type]||''}<span>${label}</span></span>`).join('')}</div><div class="question">${r.question}</div><h3>Related records</h3><div class="related">${r.related.map(id=>{const x=records.find(a=>a.id===id);return `<button data-related="${id}">${id} · ${x.title}</button>`}).join('')}</div>`;
+  paper.querySelectorAll('[data-related]').forEach(b=>b.addEventListener('click',()=>openRecord(b.dataset.related)));
+  // Every record opens at the beginning, including when following a related-record link.
+  paper.scrollTop=0;
+  overlay.scrollTop=0;
+  overlay.classList.add('open');
+  overlay.setAttribute('aria-hidden','false');
+  document.body.style.overflow='hidden';
+  requestAnimationFrame(()=>{paper.scrollTop=0; overlay.scrollTop=0; document.getElementById('closeRecord').focus({preventScroll:true});});
+}
+function closeRecord(){overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');document.body.style.overflow='';if(lastFocus&&document.contains(lastFocus))lastFocus.focus()}
+document.getElementById('closeRecord').addEventListener('click',closeRecord);overlay.addEventListener('click',e=>{if(e.target===overlay)closeRecord()});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&overlay.classList.contains('open'))closeRecord()});
+function renderTrail(){const el=document.getElementById('trail');el.innerHTML='';if(!trail.length){el.innerHTML='<span>nothing opened yet</span>';return}el.append('OPENED: ');trail.forEach((id,i)=>{if(i)el.append(' → ');const b=document.createElement('button');b.textContent=id;b.addEventListener('click',()=>openRecord(id));el.appendChild(b)})}
+renderTrail();
+</script>
+</body>
+</html>
